@@ -1,12 +1,13 @@
 const axios = require('axios');
-const Webhook = require( process.cwd() + '/Webhook');
+const Report = require( process.cwd() + '/Report');
 
 class Gist {
-  constructor(batch, filename, content) {
+  constructor(batch, filename, content, report_id) {
     this.gistUrl = 'https://api.github.com/gists';
     this.batch = batch;
     this.filename = filename;
     this.content = content;
+    this.report_id = report_id;
   }
 
   create() {
@@ -17,8 +18,8 @@ class Gist {
       data: this.getData()
     }).then(r => {
       if (r.status === 201) {
-        let wh = new Webhook(this.batch, this.filename, r.data.id);
-        wh.post();
+        let report = new Report(this.batch, this.report_id, r.data.id);
+        report.send();
         console.log(JSON.stringify(r.data.id))
       }
     }).catch(err => {
