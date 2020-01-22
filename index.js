@@ -35,8 +35,6 @@ app.post('/', (req, res) => {
   let batch = data.batch;
   let filename = data.filename;
   let report_id = data.report_id;
-  let success = JSON.stringify({message: 'Processing request'});
-  let failure = JSON.stringify({message: 'Request failed'});
   let options = {logLevel: 'info'};
 
   Promise.resolve()
@@ -47,19 +45,19 @@ app.post('/', (req, res) => {
               let gist = new Gist(batch, filename, results.lhr, report_id);
               gist.create();
               return chrome.kill().then(() => {
-                return res.status(200).send(success)
+                return res.status(204).send();
               })
             })
             .catch((err) => {
               return chrome.kill().then(err => {
                 console.log(err);
-                return res.status(400).send(failure)
+                 return res.status(400).send();
               })
             })
       })
       .catch(err => {
         console.log(err);
-        return res.send(failure);
+         return res.status(400).send();
       });
 });
 
