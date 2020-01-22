@@ -12,7 +12,7 @@ class Report {
     let values = {
       app_id: process.env.ACCESSIBLE_APP_ID,
       batch: this.batch,
-      report_id: this.batch,
+      report_id: this.report_id,
       gist_id: this.gist_id
     };
 
