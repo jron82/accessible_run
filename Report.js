@@ -1,34 +1,27 @@
-const {PubSub} = require('@google-cloud/pubsub');
+const axios = require('axios');
 
 class Report {
 
-  constructor(batch, report_id , gist_id) {
+  constructor(batch, report_id, gist_id) {
     this.batch = batch;
     this.report_id = report_id;
     this.gist_id = gist_id;
   }
 
   send() {
-    let projectId = process.env.PROJECT_ID;
-    let topicName = process.env.TOPIC_NAME;
-
-    const pubsub = new PubSub({projectId});
-    const topic = pubsub.topic(topicName);
-
     let values = {
+      app_id: process.env.ACCESSIBLE_APP_ID,
       batch: this.batch,
       report_id: this.batch,
       gist_id: this.gist_id
     };
 
-    let json = JSON.stringify(values);
-    const data = Buffer.from(json);
-
-    topic.publish(data).then((messageId) => {
-      console.log(messageId);
+    axios.post(process.env.ACCESSIBLE_WEBHOOK_URL, values).then(r => {
+      console.log(r.status);
+      console.log(r.data);
     }).catch(err => {
       console.warn(err);
-    });
+    })
   }
 }
 
