@@ -35,7 +35,7 @@ app.post('/', (req, res) => {
   let batch = data.batch;
   let filename = data.filename;
   let report_id = data.report_id;
-  let options = {logLevel: 'info'};
+  let options = {logLevel: 'warning'};
 
   Promise.resolve()
       .then(() => createLighthouse(url, options, null))
